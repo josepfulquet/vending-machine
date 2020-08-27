@@ -1,5 +1,5 @@
 <?php
-namespace pw2016\utils;
+namespace jfc\utils;
 use Redis as Redis;
 /****************************************************
  * CLASS RedisInvertred

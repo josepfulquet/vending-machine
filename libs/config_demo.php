@@ -1,5 +1,5 @@
 <?php
-use pw2016\utils\System as System;
+use jfc\utils\System as System;
 if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off"){
 		$redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 	if (isset($_POST) && count($_POST) > 0){

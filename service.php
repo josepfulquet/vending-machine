@@ -26,21 +26,18 @@ class Controller{
 		
 		require_once('libs/apps/class.soda.php');
 		$soda = new Soda();
-		$data["sodaPrice"] = $soda->getPrice();
-		$data["sodaStock"] = $soda->getStock();
+		$data["soda"] = $soda->getStock();
 		
 		require_once('libs/apps/class.juice.php');
 		$juice = new Juice();
-		$data["juicePrice"] = $juice->getPrice();
-		$data["juiceStock"] = $juice->getStock();
+		$data["juice"] = $juice->getStock();
 		
 		require_once('libs/apps/class.water.php');
 		$water = new Water();
-		$data["waterPrice"] = $water->getPrice();
-		$data["waterStock"] = $water->getStock();
+		$data["water"] = $water->getStock();
 		
 		
-		$this->_system->fShow($this->_system->get('skin')."/tpl_index.php", $data);
+		$this->_system->fShow($this->_system->get('skin')."/tpl_service.php", $data);
 		
 		
 		$footer = new Footer();

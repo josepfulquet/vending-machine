@@ -1,5 +1,5 @@
 <?php
-namespace pw2016\utils;
+namespace jfc\utils;
 class Check{
 	public function __construct($needed=true){
 		if ($needed){

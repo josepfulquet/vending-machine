@@ -1,5 +1,5 @@
 <?php
-use pw2016\utils\System as System;
+use jfc\utils\System as System;
 class DB{
 	private $_servidor;					//url del servidor de lectura
 	private $_database;					//nombre de la bd de lectura

@@ -1,7 +1,7 @@
 <?php
-namespace pw2016\utils;
+namespace jfc\utils;
 require 'includes/vendor/autoload.php';
-class MongoPW2016{
+class Mongojfc{
 
 	private $_servidor;
 	private $_database;

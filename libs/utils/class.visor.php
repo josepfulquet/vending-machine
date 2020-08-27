@@ -1,5 +1,5 @@
 <?php
-namespace pw2016\utils;
+namespace jfc\utils;
 /****************************************************
  * CLASS Visor
  * 19/11/2009 Leandro Lopez Guerrero (leandro.lopez@3data.net)

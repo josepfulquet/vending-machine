@@ -1,5 +1,5 @@
 <?php
-namespace pw2016\utils;
+namespace jfc\utils;
 class Crypt{
 
 	function __construct(){
