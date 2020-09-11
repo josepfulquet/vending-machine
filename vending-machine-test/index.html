@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <title>Vending Machine</title>
+  </head>
+  <body>
+	  
+    <div class="container">
+		<h1>Vending Machine</h1>
+		<div class="d-flex justify-content-between">
+			<p>Hi, dear customers</p>
+			<a href="service.html" role="button" class="btn btn-info">Service</a>
+		</div>
+		
+		<div class="d-flex justify-content-center">
+			<div class="input-group my-3 col-12 col-lg-8">
+				<select class="custom-select" id="insertCoin">
+					<option selected>Choose...</option>
+					<option value="005">0,05</option>
+					<option value="010">0,10</option>
+					<option value="025">0,25</option>
+					<option value="100">1,00</option>
+				</select>
+				<div class="input-group-append">
+					<button class="btn btn-outline-secondary" type="button" id="buttonInsertCoin">INSERT COIN</button>
+				</div>
+				<div class="input-group-append">
+					<button class="btn btn-outline-danger" type="button" id="buttonReturnCoin">RETURN</button>
+				</div>
+				<div class="input-group-append">
+					<button class="btn btn-outline-info" type="button" id="buttonCollectCoins" disabled>COLLECT</button>
+				</div>
+			</div>	
+		</div>
+		<div class="my-3 text-center" id="amount">0,00</div>
+		<div class="my-3 text-center lead" id="purchased"></div>
+		
+		<div class="alert alert-info text-center" id="alert"></div>
+		
+		<div class="row">
+			<div class="card col-sm-4">
+				<div class="card-body text-center">
+					<h5 class="card-title">WATER</h5>
+					<p class="card-text">
+						<b id="waterPrice"></b> €<br>
+						<b id="waterStock"></b> units available
+					</p>
+					<button class="btn btn-primary buttonBuy" product="water">BUY</button>
+				</div>
+			</div>
+			<div class="card col-sm-4">
+				<div class="card-body text-center">
+					<h5 class="card-title">JUICE</h5>
+					<p class="card-text">
+						<b id="juicePrice"></b> €<br>
+						<b id="juiceStock"></b> units available
+					</p>
+					<button class="btn btn-success buttonBuy" product="juice">BUY</button>
+				</div>
+			</div>
+			<div class="card col-sm-4">
+				<div class="card-body text-center">
+					<h5 class="card-title">SODA</h5>
+					<p class="card-text">
+						<b id="sodaPrice"></b> €<br>
+						<b id="sodaStock"></b> units available
+					</p>
+					<button class="btn btn-danger buttonBuy" product="soda">BUY</button>
+				</div>
+			</div>
+			
+		</div>
+		
+		<form class="mt-5">
+			<legend class="text-center">Change in the Machine</legend>
+			<div class="form-row">
+			    <div class="form-group col-md-3">
+			      <label for="coin005">0,05</label>
+			      <input type="text" class="form-control" readonly id="coin005">
+			    </div>
+			    <div class="form-group col-md-3">
+			      <label for="coin010">0,10</label>
+			      <input type="text" class="form-control" readonly id="coin010">
+			    </div>
+			    <div class="form-group col-md-3">
+			      <label for="coin005">0,25</label>
+			      <input type="text" class="form-control" readonly id="coin025">
+			    </div>
+			    <div class="form-group col-md-3">
+			      <label for="coin005">1,00</label>
+			      <input type="text" class="form-control" readonly id="coin100">
+			    </div>
+			  </div>
+		</form>
+	</div>
+    
+   <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="js/dist/products.js"></script>
+    <script src="js/dist/change.js"></script>
+    <script src="js/dist/vending.js"></script>
+    <script>
+$(document).ready(function(){
+	
+  $("#alert").hide();
+	
+  let apiUrl = "http://localhost/api.vending-machine/v1/";
+  let _products;
+  let _change;
+  let _vending;
+	
+  try{
+	  
+    _products = new Products({'baseHref':apiUrl+'products.php'});
+    _change = new Change({'baseHref':apiUrl+'change.php'});
+    _vending = new Vending({'baseHref':apiUrl+'vending.php'});
+    
+    var resProducts = _products.get();
+    resProducts.then(res => {
+      if (res.data.status === "Accepted"){
+	    renderProducts( res.data.message );
+      }
+      else{
+        showMessage( res.data.message );
+      }
+	});
+	
+	var resChange = _change.get();
+    resChange.then(res => {
+      if (res.data.status === "Accepted"){
+	    renderChange( res.data.message );
+      }
+      else{
+        showMessage( res.data.message );
+      }
+	});
+	
+	var resCurrent = _change.getCurrent();
+	resCurrent.then(res => {
+      if (res.data.status === "Accepted"){
+	    renderCurrent( res.data.message );
+      }
+      else{
+        showMessage( res.data.message );
+      }
+	});
+		
+	$('#buttonInsertCoin').on('click', () => {
+		var coin = $('#insertCoin').val();
+		if (!isNaN(coin)){
+			var resInsert = _vending.insertCoin(coin);
+			resInsert.then(res => {
+				if (res.data.status === "Accepted"){
+					renderChange( res.data.message.change );
+					renderCurrent( res.data.message.current );
+				}
+				else{
+                  showMessage( res.data.message );
+                }
+			});
+		}
+		$("#insertCoin option:selected").prop("selected", false)		
+	});
+	
+	$('#buttonReturnCoin').on('click', () => {
+		hideMessage();
+		var resReturn = _vending.returnCoins();
+		resReturn.then(res => {
+			if (res.data.status === "Accepted"){				
+				renderChange( res.data.message.change );
+				renderReturned( res.data.message.returned );				
+			}
+			else{
+              showMessage( res.data.message );
+            }
+		});
+	});
+	
+	$('#buttonCollectCoins').click(event => {
+		hideMessage();
+		$(event.currentTarget).prop('disabled', true);
+		$('#amount').html("0,00");
+		$('#purchased').html("");
+	});
+	
+	$('.buttonBuy').click(event => {
+		var product = $(event.currentTarget).attr('product');
+		var productStock = parseInt($('#'+product+'Stock').html());
+		var productPrice = parseFloat($('#'+product+'Price').html());
+		var amount = parseFloat($('#amount').html());
+		if (productStock > 0){
+			if (amount >= productPrice){
+				var resBuy = _vending.buy(product);
+				resBuy.then(res => {
+					if (res.data.status === "Accepted"){
+						
+						renderChange( res.data.message.change );
+						renderReturned( res.data.message.returned );
+						renderProducts( res.data.message.products );
+						renderPurchased ( res.data.message.purchased );
+					}
+					else{
+				        showMessage( res.data.message );
+				      }
+				});
+			}
+		}
+	});	
+	
+  }
+  catch(e){
+    console.log(e);
+  }
+		   
+});
+
+function renderProducts( data ){
+  if (Object.keys(data).length > 0){
+    $.each ( data, function( kProduct, vProduct ) {
+      $("#" + vProduct.product + "Price").html(vProduct.price);
+      $("#" + vProduct.product + "Stock").html(vProduct.stock);
+    });
+  }
+}
+
+function renderChange( data ){	
+  if (Object.keys( data ).length > 0){
+    $.each ( data, function( kChange, vChange ) {
+      $("#coin" + vChange.coin).val(vChange.count);	  
+    });
+  }
+}
+
+
+function renderCurrent( data ){
+  var amount = 0;
+  if (Object.keys( data ).length > 0){
+    $.each ( data, function( kCurrent, vCurrent ) {
+      amount = amount + parseFloat(vCurrent.value*vCurrent.count);   
+    });
+  }
+  $('#amount').html( amount );	
+}
+
+function renderReturned( data ){
+  var returnCoins = "";
+  if (Object.keys( data ).length > 0){
+    $.each ( data, function( returnedKey, returnedValue ) {
+      if (returnedValue.count > 0){
+        returnCoins += returnedValue.value + " * " + returnedValue.count + "<br>";
+      }
+    });
+  }
+  returnCoins = returnCoins || 0;
+  $('#amount').html( 'Returned: ' + returnCoins );
+  $('#buttonCollectCoins').removeAttr('disabled');
+}
+
+function renderPurchased( data ){
+	$('#purchased').html( 'Purchased: ' + data );
+}
+
+
+function showMessage( data ){
+	$("#alert").html("<p>"+data+"</p>").show();
+}
+
+function hideMessage(){
+	$("#alert").html("").hide();
+}
+
+	</script>
+  </body>
+</html>
+   
