@@ -1,0 +1,1 @@
+let apiUrl = "http://localhost/api.vending-machine/v1/";
