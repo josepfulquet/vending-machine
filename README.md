@@ -8,6 +8,6 @@ This Vending Machine is intended to operate in a MAMP-like environment
 
 2. If you use a different environment than the one proposed, you must change path values in the following files:
 	- apiUrl   -> vending-machine-test/js/config.js 
-	- baseHref -> api.vending-machine/libs/config.php
+	- baseHref -> api.vending-machine/v1/libs/config.php
 	
-	And if needed, change database credentials in api.vending-machine/libs/config.php
+	And if needed, change database credentials in api.vending-machine/v1/libs/config.php
