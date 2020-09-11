@@ -44,6 +44,7 @@ $(document).ready(function(){
 	});
 		
 	$('#buttonInsertCoin').on('click', () => {
+		hideMessage();
 		var coin = $('#insertCoin').val();
 		if (!isNaN(coin)){
 			var resInsert = _vending.insertCoin(coin);
@@ -101,6 +102,9 @@ $(document).ready(function(){
 				        showMessage( res.data.message );
 				      }
 				});
+			}
+			else{
+				showMessage( "not enought money" );
 			}
 		}
 	});	
