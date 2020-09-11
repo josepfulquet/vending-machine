@@ -1,5 +1,24 @@
 # vending machine
 
+## how it works?
+
+
+### the machine
+
+Choose and insert coins 
+Push button to buy product
+Collect the product, and if necessary, the change
+
+You can collect your coins
+
+### the service
+
+By clicking top right "service" button, you can access to service
+Set the stock of every item and the amount of coins.
+
+Please note that on submit the form, coins with value 1 will be automatically collected ;)
+
+
 ## install
 
 This Vending Machine is intended to operate in a MAMP-like environment
